@@ -1,0 +1,350 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>عاكف - منيو أونلاين (بريميوم)</title>
+  <meta name="description" content="اطلب من جزارة عاكف - لحوم طازة وحواوشي وعروض يومية">
+  <meta property="og:title" content="منيو عاكف - أفضل لحوم وحواوشي">
+  <meta property="og:description" content="اطلب أونلاين من جزارة عاكف – أجود اللحوم والعروض اليومية">
+  <meta property="og:image" content="logo.png">
+  <style>
+    :root{
+      --bg1: #0b0b0b;
+      --bg2: #141212;
+      --accent: #e11b1b; /* من لوان اللوجو */
+      --muted: #bfc6c6;
+      --glass: rgba(255,255,255,0.03);
+      --white: #ffffff;
+      --success: #2ecc71;
+    }
+    *{box-sizing:border-box}
+    body{margin:0;font-family:Tahoma, Arial, sans-serif;background:linear-gradient(180deg,var(--bg1),var(--bg2));color:var(--muted);}
+    header{position:sticky;top:0;z-index:120;background:linear-gradient(90deg, rgba(0,0,0,0.35), rgba(0,0,0,0.18));backdrop-filter:blur(4px);display:flex;align-items:center;gap:12px;padding:12px 16px}
+    .logo{width:84px;height:84px;border-radius:14px;overflow:hidden;border:3px solid rgba(255,255,255,0.03)}
+    .logo img{width:100%;height:100%;object-fit:cover}
+    .brand{display:flex;flex-direction:column}
+    .brand h1{margin:0;color:var(--white);font-size:18px}
+    .brand p{margin:2px 0 0;color:var(--muted);font-size:12px}
+
+    /* offers marquee */
+    .offers{flex:1;margin-left:12px}
+    .marquee{overflow:hidden;white-space:nowrap}
+    .marquee .track{display:inline-block;padding-left:100%;animation:scroll 18s linear infinite}
+    @keyframes scroll{0%{transform:translateX(0%)}100%{transform:translateX(-100%)}}
+    .marquee .badge{display:inline-block;background:linear-gradient(90deg,var(--accent),#ff6b6b);padding:6px 12px;border-radius:999px;color:white;margin-left:12px;font-weight:700}
+
+    .controls{display:flex;gap:8px;align-items:center}
+    .search{padding:8px 12px;border-radius:10px;border:1px solid rgba(255,255,255,0.04);background:transparent;color:var(--muted);min-width:220px}
+    .icon-btn{background:transparent;border:1px solid rgba(255,255,255,0.04);padding:8px;border-radius:10px;color:var(--muted);cursor:pointer}
+
+    .wrap{max-width:1100px;margin:14px auto;padding:8px}
+    .grid{display:grid;grid-template-columns:1fr 360px;gap:18px}
+    @media(max-width:980px){.grid{grid-template-columns:1fr}}
+
+    /* skeleton loader */
+    .skeleton{display:grid;grid-template-columns:repeat(2,1fr);gap:12px}
+    .skeleton .box{height:120px;border-radius:12px;background:linear-gradient(90deg,#1a1a1a,#111,#1a1a1a);animation:pulse 1.2s infinite}
+    @keyframes pulse{0%{opacity:0.6}50%{opacity:1}100%{opacity:0.6}}
+
+    /* items */
+    .card{background:rgba(255,255,255,0.02);padding:12px;border-radius:12px}
+    .menu{display:grid;grid-template-columns:repeat(2,1fr);gap:12px}
+    @media(max-width:640px){.menu{grid-template-columns:1fr}}
+    .item{display:flex;gap:10px;align-items:center;background:linear-gradient(180deg, rgba(255,255,255,0.01), transparent);padding:10px;border-radius:10px}
+    .thumb{width:96px;height:72px;border-radius:8px;overflow:hidden;background:#111;flex-shrink:0}
+    .thumb img{width:100%;height:100%;object-fit:cover;display:block}
+    .info{flex:1;text-align:right}
+    .info h3{margin:0;color:var(--white);font-size:15px}
+    .info p{margin:6px 0 0;font-size:13px;color:var(--muted)}
+    .price{margin-top:8px;color:var(--accent);font-weight:800}
+    .add{background:var(--accent);color:white;border:none;padding:8px 10px;border-radius:8px;cursor:pointer}
+
+    /* mini cart in header */
+    .mini-cart{display:inline-flex;align-items:center;gap:8px;padding:6px 10px;border-radius:12px;background:rgba(0,0,0,0.35);border:1px solid rgba(255,255,255,0.03);cursor:pointer}
+    .mini-cart .count{background:#111;padding:6px 8px;border-radius:999px;border:1px solid rgba(255,255,255,0.03);}
+    .shake{animation:shake .5s}
+    @keyframes shake{0%{transform:translateX(0)}25%{transform:translateX(-6px)}50%{transform:translateX(6px)}75%{transform:translateX(-4px)}100%{transform:translateX(0)}}
+
+    /* cart slide panel */
+    .cart-panel{position:fixed;right:-420px;top:0;width:380px;height:100%;background:linear-gradient(180deg,#0c0c0c,#111);box-shadow:-20px 0 40px rgba(0,0,0,0.6);padding:18px;transition:right .35s;z-index:200}
+    .cart-panel.open{right:0}
+    .cart-list{max-height:60vh;overflow:auto;margin-top:12px}
+    .cart-item{display:flex;justify-content:space-between;align-items:center;padding:8px;border-radius:8px;background:rgba(255,255,255,0.01);margin-bottom:8px}
+
+    /* modal preview */
+    .modal{position:fixed;inset:0;display:none;align-items:center;justify-content:center;background:rgba(0,0,0,0.6);z-index:300}
+    .modal.open{display:flex}
+    .modal .box{background:#0f0f0f;padding:12px;border-radius:12px;max-width:600px;width:90%}
+
+    /* small badges / effects */
+    .pulse{animation:pulse 1.6s infinite}
+    .blink{animation:blink 1.2s infinite}
+    @keyframes blink{0%{opacity:1}50%{opacity:0.2}100%{opacity:1}}
+
+    .countdown{font-weight:800;color:var(--accent);}
+
+    footer{margin-top:18px;text-align:center;color:#8d9999}
+  </style>
+</head>
+<body>
+  <header>
+    <div class="logo"><img src="img/صورة واتساب بتاريخ 1447-03-18 في 04.52.23_bb7a8181.jpg" alt="لوجو"></div>
+    <div class="brand">
+      <h1>عاكف - جزارة و حواوشي</h1>
+      <p>أطيب أنواع اللحوم والحواوشي — اطلب دلوقتي</p>
+    </div>
+
+    <div class="offers">
+      <div class="marquee" aria-hidden="true">
+        <div class="track" id="offersTrack"></div>
+      </div>
+    </div>
+
+    <div class="controls">
+      <input class="search" id="search" placeholder="ابحث عن صنف أو كلمة..." />
+      <button class="icon-btn" id="themeBtn" title="الوضع">🌙</button>
+      <div class="mini-cart" id="miniCartBtn" title="افتح العربة"><span id="cartTotal">0 ج.م</span><span class="count" id="cartCount">0</span></div>
+    </div>
+  </header>
+
+  <div class="wrap">
+    <div class="card">
+      <div id="skeleton" class="skeleton" aria-hidden>
+        <div class="box"></div><div class="box"></div><div class="box"></div><div class="box"></div>
+      </div>
+
+      <!-- ITEMS: غيّر الصور والمحتوى هنا مباشرة في HTML كما تحب -->
+      <div class="menu" id="menu">
+        <div class="item" data-id="1" data-price="85" data-name="حواوشي لحم">
+          <div class="thumb"><img src="img/omar_resized_1700x970 (1).jpg" alt="حواوشي"></div>
+          <div class="info"><h3>حواوشي لحم</h3><p>حواوشي عالفحم 250جم</p><div class="price">85 ج.م</div></div>
+          <div><button class="add" data-id="1">أضف</button></div>
+        </div>
+
+        <div class="item" data-id="2" data-price="110" data-name="برجر دوبل">
+          <div class="thumb"><img src="img/صورة واتساب بتاريخ 1447-03-18 في 04.52.23_bb7a8181.jpg" alt="برجر"></div>
+          <div class="info"><h3>برجر دوبل</h3><p>قطعتين لحم مع جبنة</p><div class="price">110 ج.م</div></div>
+          <div><button class="add" data-id="2">أضف</button></div>
+        </div>
+
+        <div class="item" data-id="3" data-price="95" data-name="نصف فرخة مشوية">
+          <div class="thumb"><img src="img/صورة واتساب بتاريخ 1447-03-18 في 04.52.23_bb7a8181.jpg" alt="فرخة"></div>
+          <div class="info"><h3>نصف فرخة مشوية</h3><p>نصف فرخة مع سلطة</p><div class="price">95 ج.م</div></div>
+          <div><button class="add" data-id="3">أضف</button></div>
+        </div>
+
+        <div class="item" data-id="4" data-price="220" data-name="كباب أحمر">
+          <div class="thumb"><img src="img/صورة واتساب بتاريخ 1447-03-18 في 04.52.23_bb7a8181.jpg" alt="كباب"></div>
+          <div class="info"><h3>كباب أحمر</h3><p>كباب طازة مشوي</p><div class="price">220 ج.م</div></div>
+          <div><button class="add" data-id="4">أضف</button></div>
+        </div>
+      </div>
+    </div>
+
+    <aside>
+      <div class="card">
+        <h3>تواصل سريع</h3>
+        <p class="small-muted">أضف اسمك ورقمك وسيظهر في رسالة الطلب.</p>
+        <input id="custName" class="note-input" placeholder="اسمك (اختياري)" />
+        <input id="custPhone" class="note-input" placeholder="رقم التليفون (اختياري)" />
+        <textarea id="custNote" class="note-input" placeholder="ملاحظات عامة" rows="3"></textarea>
+        <div style="display:flex;gap:8px;margin-top:8px;flex-wrap:wrap">
+          <button class="add" id="checkoutBtn">اطلب عبر واتساب</button>
+          <button class="icon-btn" id="shareBtn">مشاركة</button>
+          <a class="icon-btn" id="callBtn" href="tel:01030759462">اتصل</a>
+          <a class="icon-btn" id="mapBtn" href="https://maps.google.com?q=جزارة+عاكف" target="_blank">خرائط</a>
+        </div>
+
+        <div style="margin-top:12px;text-align:right">
+          <div>الإجمالي: <strong id="totalPrice">0 ج.م</strong></div>
+          <div id="freeShippingMsg" class="small-muted" style="margin-top:8px"></div>
+          <div style="margin-top:8px">وقت التوصيل المتوقع: <span id="eta">30 دقيقة</span></div>
+          <div style="margin-top:8px">معدل التقييم: <span id="avgRate">0</span> ⭐</div>
+        </div>
+      </div>
+    </aside>
+  </div>
+
+  <!-- cart panel -->
+  <div class="cart-panel" id="cartPanel">
+    <h3>عربة الطلب</h3>
+    <div class="cart-list" id="cartList"><div class="small-muted">العربة فارغة</div></div>
+    <div style="margin-top:8px;display:flex;justify-content:space-between;align-items:center"><div class="small-muted">المجموع</div><div id="cartSum" style="font-weight:900;color:var(--accent)">0 ج.م</div></div>
+    <div style="margin-top:12px;display:flex;gap:8px"><button class="add" id="cartCheckout">اطلب الآن</button><button class="icon-btn" id="clearCart">تفريغ</button></div>
+    <div style="margin-top:10px" id="upsellArea"></div>
+  </div>
+
+  <!-- modal preview -->
+  <div class="modal" id="previewModal"><div class="box" id="modalBox"></div></div>
+
+  <!-- toast + countdown -->
+  <div id="toast" style="position:fixed;bottom:20px;right:20px;background:var(--accent);color:#fff;padding:8px 12px;border-radius:8px;opacity:0;transition:opacity .25s;z-index:400">تمت الإضافة للعربة</div>
+
+  <script>
+    // ========= settings ==========
+    const PHONE = '201030759462';
+    const LOCAL_PHONE = '01030759462';
+    const CURRENCY = 'ج.م';
+    const DISCOUNT_PERCENT = 10; // يصل حتى 10%
+    const FREE_SHIPPING_THRESHOLD = 300; // ج.م
+
+    // offers messages (تقدر تعدل النصوص هنا)
+    const OFFERS = [
+      'عرض اليوم: خصم حتى 10% على الطلبات فوق 500 ج.م!',
+      'جرب حواوشي عاكف - طعمه يخليك ترجع تاني 🔥',
+      'توصيل سريع خلال 30 دقيقة تقريباً' 
+    ];
+
+    // ====== state ======
+    let cart = JSON.parse(localStorage.getItem('akaf_cart')||'[]');
+    let ratings = JSON.parse(localStorage.getItem('akaf_ratings')||'{}');
+    let lastCart = JSON.parse(localStorage.getItem('akaf_last')||'[]');
+
+    // ========== init UI ==========
+    const menu = document.getElementById('menu');
+    const itemsDOM = Array.from(menu.querySelectorAll('.item'));
+    const ITEMS = itemsDOM.map(el=>({
+      id: Number(el.dataset.id),
+      name: el.dataset.name || el.querySelector('h3')?.textContent.trim(),
+      price: Number(el.dataset.price || 0),
+      img: el.querySelector('img')?.src || '',
+      desc: el.querySelector('p')?.textContent || ''
+    }));
+
+    // build offers marquee
+    const offersTrack = document.getElementById('offersTrack');
+    offersTrack.innerHTML = OFFERS.map(o=>`<span class='badge'>${o}</span>`).join(' ');
+
+    // show skeleton then content
+    const skeleton = document.getElementById('skeleton');
+    setTimeout(()=>{ skeleton.style.display='none'; menu.style.opacity=1; }, 800);
+
+    // helper
+    function formatPrice(n){ return n.toLocaleString('ar-EG') + ' ' + CURRENCY }
+
+    // render items (buttons already inline in HTML, attach events)
+    document.querySelectorAll('.add').forEach(btn=>{ btn.addEventListener('click', ()=>{ const id = Number(btn.dataset.id || btn.closest('.item')?.dataset.id); addToCartById(id); playPop(); }); });
+
+    // preview modal on image click
+    itemsDOM.forEach(el=>{ const img = el.querySelector('img'); if(img){ img.style.cursor='pointer'; img.addEventListener('click', ()=>{ openPreview(el); }); } });
+
+    function openPreview(el){ const id = Number(el.dataset.id); const it = ITEMS.find(i=>i.id===id); const box = document.getElementById('modalBox'); box.innerHTML = `
+      <div style='display:flex;gap:12px;align-items:center'>
+        <div style='flex:0 0 200px'><img src='${it.img}' style='width:200px;height:140px;object-fit:cover;border-radius:8px'/></div>
+        <div style='text-align:right'>
+          <h3 style='margin:0;color:var(--white)'>${it.name}</h3>
+          <p style='color:var(--muted)'>${it.desc}</p>
+          <div style='margin-top:8px;font-weight:800;color:var(--accent)'>${formatPrice(it.price)}</div>
+          <div style='margin-top:8px'><button class='add' id='modalAdd'>أضف للعربة</button></div>
+        </div>
+      </div>`;
+      document.getElementById('previewModal').classList.add('open');
+      document.getElementById('modalAdd').addEventListener('click', ()=>{ addToCartById(it.id); closePreview(); });
+    }
+    document.getElementById('previewModal').addEventListener('click', (e)=>{ if(e.target.id==='previewModal') closePreview(); });
+    function closePreview(){ document.getElementById('previewModal').classList.remove('open'); }
+
+    // add to cart
+    function addToCartById(id){ const item = ITEMS.find(i=>i.id===id); if(!item) return; const found = cart.find(c=>c.id===id); if(found) found.qty++; else cart.push({id:id,qty:1}); saveState(); renderCart(); showToast('تمت الإضافة'); animateMiniCart(); // show upsell
+      showUpsell(item.id);
+    }
+
+    function saveState(){ localStorage.setItem('akaf_cart', JSON.stringify(cart)); localStorage.setItem('akaf_ratings', JSON.stringify(ratings)); }
+
+    function renderCart(){ const list = document.getElementById('cartList'); list.innerHTML=''; if(cart.length===0){ list.innerHTML='<div class="small-muted">العربة فارغة</div>'; document.getElementById('cartSum').textContent = '0 ' + CURRENCY; document.getElementById('cartCount').textContent='0'; document.getElementById('cartTotal').textContent='0 ' + CURRENCY; return }
+      cart.forEach((ci,idx)=>{ const it = ITEMS.find(i=>i.id===ci.id); const el = document.createElement('div'); el.className='cart-item'; el.innerHTML = `
+        <div style='text-align:right'>
+          <strong style='color:var(--white)'>${it.name}</strong>
+          <div class='small-muted'>${ci.qty} x ${formatPrice(it.price)}</div>
+        </div>
+        <div style='display:flex;flex-direction:column;gap:6px;align-items:flex-end'>
+          <div style='font-weight:800;color:var(--accent)'>${formatPrice(it.price*ci.qty)}</div>
+          <div style='display:flex;gap:6px'>
+            <button class='icon-btn' data-idx='${idx}' data-act='inc'>+</button>
+            <button class='icon-btn' data-idx='${idx}' data-act='dec'>-</button>
+            <button class='icon-btn' data-idx='${idx}' data-act='rem'>حذف</button>
+          </div>
+        </div>`; list.appendChild(el); });
+      // attach
+      list.querySelectorAll('button').forEach(b=> b.addEventListener('click', ()=>{ const idx=Number(b.dataset.idx); const act=b.dataset.act; if(act==='inc') changeQty(idx,1); if(act==='dec') changeQty(idx,-1); if(act==='rem') removeItem(idx); }));
+      updateTotals();
+    }
+
+    function changeQty(idx,delta){ cart[idx].qty += delta; if(cart[idx].qty<=0) cart.splice(idx,1); saveState(); renderCart(); playTrash(); }
+    function removeItem(idx){ cart.splice(idx,1); saveState(); renderCart(); playTrash(); }
+
+    function updateTotals(){ const subtotal = cart.reduce((s,i)=> s + (ITEMS.find(x=>x.id===i.id).price * i.qty), 0); const discount = subtotal >= 500 ? Math.round(subtotal * DISCOUNT_PERCENT/100) : 0; const total = subtotal - discount; document.getElementById('cartSum').textContent = formatPrice(total); document.getElementById('totalPrice').textContent = formatPrice(total); document.getElementById('cartCount').textContent = cart.reduce((s,i)=>s+i.qty,0); document.getElementById('cartTotal').textContent = formatPrice(total);
+      // free shipping hint
+      const freeMsg = document.getElementById('freeShippingMsg'); if(subtotal < FREE_SHIPPING_THRESHOLD){ const need = FREE_SHIPPING_THRESHOLD - subtotal; freeMsg.textContent = `أضف ${need.toLocaleString('ar-EG')} ${CURRENCY} و خذ توصيل مجاني`; } else { freeMsg.textContent = 'أنت حصلت على توصيل مجاني 🎉'; }
+      // discount info
+      const upsell = document.getElementById('upsellArea'); upsell.innerHTML = discount>0 ? `<div style='color:var(--success)'>تم تطبيق خصم ${DISCOUNT_PERCENT}% بقيمة ${formatPrice(discount)}</div>` : '';
+    }
+
+    // checkout via WhatsApp
+    document.getElementById('cartCheckout').addEventListener('click', ()=>{ checkout(); });
+    document.getElementById('checkoutBtn').addEventListener('click', ()=>{ checkout(); });
+    function checkout(){ if(cart.length===0){ alert('العربة فارغة'); return } const name = document.getElementById('custName').value || 'زبون'; const phone = document.getElementById('custPhone').value || LOCAL_PHONE; const note = document.getElementById('custNote').value || ''; let text = `طلب جديد من ${name} - منيو عاكف\n`;
+      cart.forEach(i=>{ const it = ITEMS.find(x=>x.id==i.id); text += `- ${it.name} x ${i.qty} = ${it.price*i.qty} ${CURRENCY}\n`; });
+      const subtotal = cart.reduce((s,i)=> s + (ITEMS.find(x=>x.id===i.id).price * i.qty), 0); const discount = subtotal >= 500 ? Math.round(subtotal * DISCOUNT_PERCENT/100) : 0; const total = subtotal - discount; text += `\nالمجموع: ${total} ${CURRENCY}`; if(discount>0) text += ` (شمل خصم ${DISCOUNT_PERCENT}% = ${discount} ${CURRENCY})`;
+      if(note) text += `\nملاحظات: ${note}`;
+      text += `\nرقم العميل: ${phone}`;
+      const url = `https://wa.me/${PHONE}?text=${encodeURIComponent(text)}`; window.open(url,'_blank'); // after sending clear cart
+      lastCart = JSON.parse(JSON.stringify(cart)); localStorage.setItem('akaf_last', JSON.stringify(lastCart)); cart = []; saveState(); renderCart(); showToast('تم إرسال الطلب');
+    }
+
+    document.getElementById('clearCart').addEventListener('click', ()=>{ if(confirm('هل تريد تفريغ العربة؟')){ lastCart = JSON.parse(JSON.stringify(cart)); localStorage.setItem('akaf_last', JSON.stringify(lastCart)); cart=[]; saveState(); renderCart(); showToast('تم التفريغ'); showRestoreBtn(); } });
+
+    function showRestoreBtn(){ const panel = document.getElementById('cartPanel'); if(panel.querySelector('#restoreBtn')) return; const btn = document.createElement('button'); btn.className='add'; btn.id='restoreBtn'; btn.textContent='رجع آخر طلب'; btn.style.marginTop='8px'; btn.addEventListener('click', ()=>{ cart = JSON.parse(localStorage.getItem('akaf_last')||'[]'); saveState(); renderCart(); btn.remove(); }); panel.appendChild(btn); }
+
+    function showUpsell(productId){ const area = document.getElementById('upsellArea'); // simple static suggestion
+      const suggestion = ITEMS.find(i=>i.id!==productId); if(suggestion){ area.innerHTML += `<div style='margin-top:8px;background:rgba(255,255,255,0.02);padding:8px;border-radius:8px'>جرّب كمان: <strong style='color:var(--white)'>${suggestion.name}</strong> — <button class='add' onclick='addToCartById(${suggestion.id})'>أضف</button></div>`; }
+    }
+
+    // toast
+    const toast = document.getElementById('toast'); function showToast(txt='تمت الإضافة'){ toast.textContent = txt; toast.style.opacity=1; setTimeout(()=> toast.style.opacity=0,2000); }
+
+    // sounds
+    function playPop(){ try{ const ctx=new (window.AudioContext||window.webkitAudioContext)(); const o=ctx.createOscillator(); const g=ctx.createGain(); o.type='sine'; o.frequency.value=880; g.gain.value=0.01; o.connect(g); g.connect(ctx.destination); o.start(); setTimeout(()=>{o.stop();ctx.close()},60);}catch(e){} }
+    function playTrash(){ try{ const ctx=new (window.AudioContext||window.webkitAudioContext)(); const o=ctx.createOscillator(); const g=ctx.createGain(); o.type='square'; o.frequency.value=220; g.gain.value=0.01; o.connect(g); g.connect(ctx.destination); o.start(); setTimeout(()=>{o.stop();ctx.close()},80);}catch(e){} }
+
+    // mini cart animation
+    function animateMiniCart(){ const el = document.getElementById('miniCartBtn'); el.classList.add('shake'); setTimeout(()=> el.classList.remove('shake'),500); }
+
+    // open cart panel
+    const cartPanel = document.getElementById('cartPanel'); document.getElementById('miniCartBtn').addEventListener('click', ()=>{ cartPanel.classList.toggle('open'); });
+
+    // render start
+    renderCart();
+
+    // preview: already handled
+
+    // theme: auto night after 7pm
+    (function initTheme(){ const h = new Date().getHours(); if(h>=19 || window.matchMedia('(prefers-color-scheme: dark)').matches) document.documentElement.style.setProperty('--bg1','#050505'); document.getElementById('themeBtn').addEventListener('click', ()=>{ document.body.classList.toggle('light-mode'); }); })();
+
+    // countdown example for offer (تعديل وقت العرض هنا)
+    (function initCountdown(){ const end = Date.now() + 1000*60*60*6; // 6 ساعات من الآن كمثال
+      const el = document.createElement('div'); el.style.cssText='position:absolute;left:16px;top:10px;color:var(--accent);font-weight:800'; document.body.appendChild(el);
+      setInterval(()=>{ const diff = end - Date.now(); if(diff<=0){ el.textContent='انتهى العرض'; } else { const hh = Math.floor(diff/3600000); const mm = Math.floor((diff%3600000)/60000); el.textContent=`عرض ينتتهي خلال ${hh}س ${mm}د - خصم حتى ${DISCOUNT_PERCENT}%`; } },1000);
+    })();
+
+    // social message (fake live purchases)
+    (function socialPulse(){ const el = document.createElement('div'); el.style.cssText='position:fixed;bottom:20px;left:20px;background:rgba(0,0,0,0.6);color:#fff;padding:8px;border-radius:8px;z-index:500'; document.body.appendChild(el);
+      const messages = ['5 أشخاص اشتروا ريش ضاني في آخر ساعة','3 عملاء اشتروا حواوشي الآن','عرض اليوم يجذب المشترين!']; let idx=0; setInterval(()=>{ el.textContent = messages[idx++%messages.length]; el.style.opacity=1; setTimeout(()=> el.style.opacity=0.5,4000); },5000);
+    })();
+
+    // swipe gestures (mobile) لفتح/غلق العربة
+    (function swipeGestures(){ let startX=0; document.addEventListener('touchstart', e=> startX = e.changedTouches[0].clientX); document.addEventListener('touchend', e=>{ const dx = e.changedTouches[0].clientX - startX; if(dx>80) cartPanel.classList.add('open'); if(dx<-80) cartPanel.classList.remove('open'); }); })();
+
+    // share
+    document.getElementById('shareBtn').addEventListener('click', ()=>{ const txt = ITEMS.map(i=> i.name + ' - ' + i.price + ' ' + CURRENCY).join('\n'); if(navigator.share){ navigator.share({title:'منيو عاكف', text: txt}).catch(()=>{}); } else { navigator.clipboard.writeText(txt); alert('تم نسخ المنيو، الصقه في اي مكان للمشاركة'); } });
+
+    // restore last cart on load (if any)
+    (function restoreLast(){ const last = JSON.parse(localStorage.getItem('akaf_last')||'[]'); if(last && last.length && !cart.length){ /* keep empty until user asks */ } })();
+
+    // allow editing images/content by HTML: you can تغيير src في عناصر .thumb img مباشرة داخل الـ HTML فوق
+
+  </script>
+  <footer>نسخة بريموم مهيّأة للعرض — عدّل الصور مباشرة في وسم &lt;img src="..."&gt; لكل صنف داخل الكود</footer>
+</body>
+</html>
